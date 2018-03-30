@@ -1,0 +1,88 @@
+<div class="row">
+  <!-- 
+    col-md-6 means half of the page, 6 out of 12 columns.
+    left side
+  -->
+  <div class="col-md-6">
+      <form #f="ngForm" (ngSubmit)="save(f.value)">
+          <div class="form-group">
+            <label for="title"> Title</label>
+            <input #title="ngModel"  [(ngModel)]="product.title" name="title" id="title" type="text" class="form-control" required>
+            <div class="alert alert-danger" *ngIf="title.touched && title.invalid">
+              give a title dude
+            </div>
+          </div>
+        
+             <!--voor min getallen te blokeren moet je eerst 3de partij library 
+                instaleren 
+                1. npm i ng2-validation --save
+                2. in app.modul: import {CustomFormsModule} from 'ng2-validation';
+                3. in app.modul: in imports:  CustomFormsModule,
+                4. hieronder in input tag: [min]="0" toevoegen 
+              -->
+        
+          <div class="form-group">
+            <label for="price"> Price</label>
+            <div class="input-group">
+              <span class="input-group-text">€</span>
+         
+              <input #price= "ngModel" [(ngModel)]="product.price" name="price" id="price" type="number" class="form-control" required [min]="0">
+            </div>
+            <div class="alert alert-danger"
+            *ngIf="price.touched && price.invalid">
+               <div *ngIf="price.errors.required">price is requiredfield</div>
+               <div *ngIf="price.errors.min">price can't be less than 0</div>
+             </div>
+          </div>
+        
+          <div class="form-group">
+            <label for="category"> Category</label>
+            <select #category="ngModel" [(ngModel)]="product.category" name="category" id="category" class="form-control" required>
+              <option value=""></option>
+              <option *ngFor="let c of categories$ | async" [value]="c.$key">
+                {{c.name}}
+              </option>
+            </select>
+            <div class="alert alert-danger" *ngIf="category.touched && category.invalid">
+                choos a category dude
+              </div>
+          </div>
+        
+          <div class="form-group">
+            <label for="imageUrl"> image url</label>
+            <input #imageUrl="ngModel" [(ngModel)]="product.imageUrl" name="imageUrl" id="imageUrl" type="text" class="form-control" required url>
+            <div class="alert alert-danger" *ngIf="imageUrl.touched && imageUrl.invalid">
+               <div *ngIf="imageUrl.errors.required">Image url is required</div>
+               <div *ngIf="imageUrl.errors.url">please enter valid url</div>
+            
+              </div>
+          </div>
+          <button class="btn btn-primary">Save</button>
+          <button type="button" (click)="delete()" class="btn btn-danger">Delete</button>
+                <!--type="button", becouse default is type="submib"-->
+        </form>
+
+  </div>
+
+  <!--right side-->
+  <div class="col-md-6">
+      <div *ngIf="product.title" class="card" style="width: 20rem;">
+        <!--field binding :
+          [src]="imageUrl.value"
+            {{ title.value }}
+            {{ price.value}}
+          -->
+          <img class="card-img-top" [src]="product.imageUrl" *ngIf="product.imageUrl" >
+          <div class="card-body">
+            <h4 class="card-title">{{ product.title }}</h4>
+            <p class="card-text">{{ product.price | currency:'EUR': true}}</p>
+          </div>
+        </div>
+
+  </div>
+
+</div>
+
+
+
+  

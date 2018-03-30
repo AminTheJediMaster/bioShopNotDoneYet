@@ -1,0 +1,48 @@
+<!--devide the page in ttwo sides, left and right
+the list of categories in left side and products in left side-->
+
+<!--[queryParams]="{ category: c.$key }"-->
+<!-- this code above should go under rouLink='/'
+  at line 15-->
+<div class="row">
+  <div class="col-3">  
+    <div class="list-group">
+      <a
+       *ngFor="let c of categories$ | async" 
+       routLink="/"
+       
+        class="list-group-item list-group-item-action"
+        >
+        {{ c.name }}
+      </a>
+    </div> 
+  </div>
+  <div class="col">
+    <!--right side: products-->
+      <div class="row">
+          <ng-container  *ngFor="let p of products$ | async; let i = index" >
+              <div class="col">
+                  <div class="card" style="width: 15rem;">
+                    <img class="card-img-top" [src]="p.imageUrl" alt="Card image cap">
+                    <div class="card-body">
+                      <h4 class="card-title">{{p.title}}</h4>
+                      <p class="card-text">{{p.price | currency:'EUR':true}}</p>
+                      <a href="#" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                  </div>
+                </div>
+                <!--(i is 0 based, so therefore +1,)
+                  devide the reminder of this number by 2,
+                  ===  if that is 0 it's ok 
+                  donditionaly we render this after every 2 products
+                  basically a code to devide the cards in 2 side of 
+                  the page.
+                  -->
+                <div *ngIf="(i+1)%2===0" class="w-100"></div>
+          </ng-container>
+        </div>
+  </div>
+</div>
+
+
+
